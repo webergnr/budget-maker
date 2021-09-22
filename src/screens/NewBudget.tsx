@@ -1,12 +1,13 @@
 /* eslint-disable no-lone-blocks */
 import React, {useState} from 'react';
 import {Text, View} from 'react-native';
+import WizardItemsDesc from '../components/WizardItemsDesc';
 import WizardName from '../components/WizardName';
 import WizardPhone from '../components/WizardPhone';
 import WizardPlace from '../components/WizardPlace';
 import WizardPresets from '../components/WizardPresets';
 
-interface IItem {
+export interface IItem {
   description?: string;
   value: number;
   name: string;
@@ -57,12 +58,38 @@ const NewBudget: React.FC = () => {
       break;
     }
     case 3: {
-      return <WizardPresets />;
+      return (
+        <WizardPresets
+          nextWizard={() => {
+            setWizardIndex(wizardIndex + 1);
+          }}
+          setPresets={setPresets}
+        />
+      );
+      break;
+    }
+    case 4: {
+      return (
+        <WizardItemsDesc
+          nextWizard={() => {
+            setWizardIndex(wizardIndex + 1);
+          }}
+          setItemsDesc={setItems}
+          selectedItems={presets}
+        />
+      );
       break;
     }
 
     default:
-      return <Text>test</Text>;
+      return (
+        <View>
+          <Text>{infoName}</Text>
+          <Text>{infoPlace}</Text>
+          <Text>{infoPhone}</Text>
+          <Text>{presets}</Text>
+        </View>
+      );
       break;
   }
 };
