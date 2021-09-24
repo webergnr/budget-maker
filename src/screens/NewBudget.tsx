@@ -6,12 +6,14 @@ import WizardName from '../components/WizardName';
 import WizardPhone from '../components/WizardPhone';
 import WizardPlace from '../components/WizardPlace';
 import WizardPresets from '../components/WizardPresets';
+import WizardQtys from '../components/WizardQtys';
 
 export interface IItem {
   description?: string;
   value: number;
   name: string;
-  viewed: boolean;
+  qty: number;
+  qtyType: string;
 }
 
 const NewBudget: React.FC = () => {
@@ -76,6 +78,18 @@ const NewBudget: React.FC = () => {
           }}
           setItemsDesc={setItems}
           selectedItems={presets}
+        />
+      );
+      break;
+    }
+    case 5: {
+      return (
+        <WizardQtys
+          currentSelectedItems={items}
+          nextWizard={() => {
+            setWizardIndex(wizardIndex + 1);
+          }}
+          setItems={setItems}
         />
       );
       break;
