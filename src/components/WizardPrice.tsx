@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {Text, View} from 'react-native';
 import {presetItems} from '../constants';
+import currency from 'currency.js';
 import {IItem} from '../screens/NewBudget';
 import TextBigQuestion from './TextBigQuestion';
 import TextInputQuestion from './TextInputQuestion';
 
-const WizardQtys = ({
+const WizardPrice = ({
   currentSelectedItems,
   setItems,
   nextWizard,
@@ -15,14 +16,15 @@ const WizardQtys = ({
   nextWizard(): void;
 }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [currentQtyText, setCurrentQtyText] = useState('');
+  const [currentBudgetValue, setCurrentBudgetValue] = useState(0);
+  const [currentPriceText, setCurrentPriceText] = useState('');
 
   const handleNextQuestion = (item: IItem) => {
     const itemWithNewValue: IItem = {
       id: item.id,
       name: item.name,
-      qty: Number(currentQtyText),
-      value: 0,
+      qty: item.qty,
+      value: Number(currentPriceText),
       description: item.description,
     };
 
@@ -31,7 +33,10 @@ const WizardQtys = ({
     setItems([...allButOne, itemWithNewValue].sort((a, b) => a.id - b.id));
 
     setTimeout(() => {
-      setCurrentQtyText('');
+      setCurrentPriceText('');
+      setCurrentBudgetValue(
+        currentBudgetValue + Number(currentPriceText) * item.qty,
+      );
       if (currentQuestion !== currentSelectedItems.length - 1) {
         setCurrentQuestion(currentQuestion + 1);
       } else {
@@ -49,15 +54,30 @@ const WizardQtys = ({
             i === currentQuestion && (
               <React.Fragment key={x.id}>
                 <TextBigQuestion>
-                  {presetItems[x.name].questionType}
+                  Pre&ccedil;o por {presetItems[x.name].qtyType} de {x.name}
                 </TextBigQuestion>
                 <View style={{padding: 10, width: '33%'}}>
                   <TextInputQuestion
                     keyboardType="number-pad"
-                    value={currentQtyText}
-                    onChangeText={_ => setCurrentQtyText(_)}
+                    value={currentPriceText}
+                    onChangeText={_ => setCurrentPriceText(_)}
                     onEndEditing={() => handleNextQuestion(x)}
                   />
+                </View>
+                <View style={{marginTop: 100}}>
+                  <Text style={{fontSize: 18}}>{`${x.qty} ${
+                    presetItems[x.name].qtyType
+                  } x R$ ${currency(currentPriceText)} =  R$ ${currency(
+                    Number(currentPriceText) * x.qty,
+                  )}`}</Text>
+                </View>
+                <View style={{marginTop: 10}}>
+                  <Text style={{fontSize: 18, color: '#8a8208'}}>
+                    Total do or&ccedil;amento: R$
+                    {` ${currency(
+                      currentBudgetValue + Number(currentPriceText) * x.qty,
+                    )}`}
+                  </Text>
                 </View>
               </React.Fragment>
             )
@@ -67,4 +87,4 @@ const WizardQtys = ({
   );
 };
 
-export default WizardQtys;
+export default WizardPrice;

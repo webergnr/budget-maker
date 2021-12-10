@@ -6,14 +6,29 @@ import WizardName from '../components/WizardName';
 import WizardPhone from '../components/WizardPhone';
 import WizardPlace from '../components/WizardPlace';
 import WizardPresets from '../components/WizardPresets';
+import WizardPrice from '../components/WizardPrice';
 import WizardQtys from '../components/WizardQtys';
+import WizardReview from '../components/WizardReview';
+import WizardSize from '../components/WizardSize';
+import WizardWorkPrice from '../components/WizardWorkPrice';
 
 export interface IItem {
+  id: number;
   description?: string;
   value: number;
   name: string;
   qty: number;
-  qtyType: string;
+}
+
+export interface IBudget {
+  id: number;
+  date: string;
+  name: string;
+  phone?: string;
+  place: string;
+  size: string;
+  payment: string;
+  items: IItem[];
 }
 
 const NewBudget: React.FC = () => {
@@ -22,6 +37,7 @@ const NewBudget: React.FC = () => {
   const [infoName, setInfoName] = useState<string>('');
   const [infoPlace, setInfoPlace] = useState<string>('');
   const [infoPhone, setInfoPhone] = useState<string>('');
+  const [infoSize, setInfoSize] = useState<string>('');
   const [presets, setPresets] = useState<string[]>([]);
   const [items, setItems] = useState<IItem[]>([]);
 
@@ -35,7 +51,6 @@ const NewBudget: React.FC = () => {
           setName={setInfoName}
         />
       );
-      break;
     }
     case 1: {
       return (
@@ -46,7 +61,6 @@ const NewBudget: React.FC = () => {
           setPlace={setInfoPlace}
         />
       );
-      break;
     }
     case 2: {
       return (
@@ -57,7 +71,6 @@ const NewBudget: React.FC = () => {
           setPhone={setInfoPhone}
         />
       );
-      break;
     }
     case 3: {
       return (
@@ -68,7 +81,6 @@ const NewBudget: React.FC = () => {
           setPresets={setPresets}
         />
       );
-      break;
     }
     case 4: {
       return (
@@ -80,19 +92,66 @@ const NewBudget: React.FC = () => {
           selectedItems={presets}
         />
       );
-      break;
     }
     case 5: {
       return (
         <WizardQtys
-          currentSelectedItems={items}
           nextWizard={() => {
             setWizardIndex(wizardIndex + 1);
           }}
+          currentSelectedItems={items.sort((a, b) => a.id - b.id)}
           setItems={setItems}
         />
       );
-      break;
+    }
+    case 6: {
+      return (
+        <WizardPrice
+          nextWizard={() => {
+            setWizardIndex(wizardIndex + 1);
+          }}
+          currentSelectedItems={items.sort((a, b) => a.id - b.id)}
+          setItems={setItems}
+        />
+      );
+    }
+    case 7: {
+      return (
+        <WizardWorkPrice
+          nextWizard={() => {
+            setWizardIndex(wizardIndex + 1);
+          }}
+          currentSelectedItems={items}
+          setItems={setItems}
+        />
+      );
+    }
+    case 8: {
+      return (
+        <WizardSize
+          nextWizard={() => {
+            setWizardIndex(wizardIndex + 1);
+          }}
+          setSize={setInfoSize}
+        />
+      );
+    }
+    case 9: {
+      return (
+        <WizardReview
+          currentBudget={{
+            id: 123,
+            date: new Date().toString(),
+            name: infoName,
+            place: infoPlace,
+            size: infoSize,
+            phone: infoPhone,
+            items,
+            payment: 'A vista',
+          }}
+          setBudget={x => console.log(x)}
+        />
+      );
     }
 
     default:
@@ -101,10 +160,11 @@ const NewBudget: React.FC = () => {
           <Text>{infoName}</Text>
           <Text>{infoPlace}</Text>
           <Text>{infoPhone}</Text>
-          <Text>{presets}</Text>
+          <Text>{infoSize}</Text>
+          <Text>{JSON.stringify(presets)}</Text>
+          <Text>{JSON.stringify(items, null, 2)}</Text>
         </View>
       );
-      break;
   }
 };
 

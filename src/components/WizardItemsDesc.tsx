@@ -46,8 +46,8 @@ const WizardItemsDesc = ({
           name: selectedItems[currentQuestion],
           description: currentSelectedOption,
           qty: 0,
-          qtyType: presetItems[selectedItems[currentQuestion]].qtyType,
           value: 0,
+          id: Math.round(Math.random() * 2 ** 32),
         },
       ]);
       setCurrentQuestion(currentQuestion + 1);
@@ -58,8 +58,8 @@ const WizardItemsDesc = ({
           name: selectedItems[currentQuestion],
           description: currentSelectedOption,
           qty: 0,
-          qtyType: presetItems[selectedItems[currentQuestion]].qtyType,
           value: 0,
+          id: Math.round(Math.random() * 2 ** 32),
         },
       ]);
       nextWizard();

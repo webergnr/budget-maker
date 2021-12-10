@@ -19,7 +19,7 @@ type Props = {
   navigation: HomeScreenNavigationProp;
 };
 
-const BudgetItem = () => {
+const BudgetItem = ({t}) => {
   return (
     <TouchableOpacity
       style={{
@@ -37,9 +37,9 @@ const BudgetItem = () => {
       }}>
       <View>
         <Text style={{fontSize: 18}}>Fulano de tal</Text>
-        <Text style={{fontSize: 12, color: 'gray'}}>Assistencia</Text>
+        <Text style={{fontSize: 18, color: 'gray'}}>{t}</Text>
       </View>
-      <Text style={{fontSize: 12, color: 'gray'}}>12/12/2000</Text>
+      <Text style={{fontSize: 18, color: 'gray'}}>12/12/2021</Text>
     </TouchableOpacity>
   );
 };
@@ -80,7 +80,14 @@ const HomeScreen = ({navigation}: Props) => {
       </View>
       <SafeAreaView style={{flex: 1}}>
         <ScrollView style={{backgroundColor: '#f1f1f1', padding: 10}}>
-          <BudgetItem />
+          <BudgetItem t="Assistencia" />
+          <BudgetItem t="Poco" />
+          <BudgetItem t="Poco" />
+          <BudgetItem t="Poco" />
+          <BudgetItem t="Poco" />
+          <BudgetItem t="Poco" />
+          <BudgetItem t="Poco" />
+          <BudgetItem t="Poco" />
         </ScrollView>
       </SafeAreaView>
     </View>
