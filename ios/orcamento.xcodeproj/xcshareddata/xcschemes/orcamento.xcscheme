@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "jwbudget.app"
-               BlueprintName = "jwbudget"
-               ReferencedContainer = "container:jwbudget.xcodeproj">
+               BuildableName = "orcamento.app"
+               BlueprintName = "orcamento"
+               ReferencedContainer = "container:orcamento.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "jwbudgetTests.xctest"
-               BlueprintName = "jwbudgetTests"
-               ReferencedContainer = "container:jwbudget.xcodeproj">
+               BuildableName = "orcamentoTests.xctest"
+               BlueprintName = "orcamentoTests"
+               ReferencedContainer = "container:orcamento.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "jwbudget.app"
-            BlueprintName = "jwbudget"
-            ReferencedContainer = "container:jwbudget.xcodeproj">
+            BuildableName = "orcamento.app"
+            BlueprintName = "orcamento"
+            ReferencedContainer = "container:orcamento.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "jwbudget.app"
-            BlueprintName = "jwbudget"
-            ReferencedContainer = "container:jwbudget.xcodeproj">
+            BuildableName = "orcamento.app"
+            BlueprintName = "orcamento"
+            ReferencedContainer = "container:orcamento.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
