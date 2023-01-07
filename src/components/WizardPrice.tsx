@@ -58,6 +58,7 @@ const WizardPrice = ({
                 </TextBigQuestion>
                 <View style={{padding: 10, width: '33%'}}>
                   <TextInputQuestion
+                    autoFocus
                     keyboardType="number-pad"
                     value={currentPriceText}
                     onChangeText={_ => setCurrentPriceText(_)}

@@ -10,6 +10,16 @@ import {
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../App';
 
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import Share from 'react-native-share';
+
+const optionsPDF = {
+  html: '<h1>PDF TEST</h1>',
+  fileName: 'test',
+  directory: 'Documents',
+  base64: true,
+};
+
 type HomeScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'Home'
@@ -69,8 +79,38 @@ const HomeScreen = ({navigation}: Props) => {
               backgroundColor: '#00aa00',
               borderRadius: 999,
             }}
+            onPress={async () => {
+              let file = await RNHTMLtoPDF.convert(optionsPDF);
+              console.log(file.base64);
+              if (file.base64) {
+                const base64Data = 'data:application/pdf;base64,' + file.base64;
+                const x = await Share.open({
+                  url: base64Data,
+                  title: 'megatest.pdf',
+                });
+
+                // const x = await Share.share({
+                //   title: '123',
+                //   url: base64Data,
+                //   message: base64Data,
+                // });
+
+                console.log('### =>', x);
+              }
+              // alert(file.filePath)
+            }}>
+            <Text style={{color: 'white', paddingHorizontal: 8, fontSize: 20}}>
+              PDF
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              padding: 5,
+              backgroundColor: '#00aa00',
+              borderRadius: 999,
+            }}
             onPress={() => {
-              navigation.navigate('NewBudget');
+              // navigation.navigate('NewBudget');
             }}>
             <Text style={{color: 'white', paddingHorizontal: 8, fontSize: 20}}>
               CRIAR
