@@ -66,11 +66,15 @@ const WizardReview = ({
 
   const [itemEditing, setItemEditing] = useState<IItem>({
     id: 0,
-    name: 'ASDASDASD',
+    name: '',
     qty: 100,
     value: 20,
-    description: 'ASDASDAS',
+    description: '',
   });
+
+  const localTotal = currency(
+    localBudget.items.map(i => i.qty * i.value).reduce((a, b) => a + b, 0),
+  ).toString();
 
   // temp editor for the values when editing.
   // first one is qty, other is value
@@ -99,24 +103,47 @@ const WizardReview = ({
     setLocalBudget(p => ({...p, items: [...p.items, newItem]}));
   };
 
+  const handleRemoveItem = () => {
+    setLocalBudget(prev => ({
+      ...prev,
+      items: prev.items.filter(f => f.id !== deleteId),
+    }));
+    setModalDelete(false);
+  };
+
+  const handleFinish = () => {
+    setBudget(localBudget);
+  };
+
   return (
     <View style={{flex: 1, justifyContent: 'flex-start', alignItems: 'center'}}>
       <View style={{padding: 10, width: '100%', flex: 1}}>
         <ScrollView>
           <TextBigQuestion>Revise o or&ccedil;amento</TextBigQuestion>
-          <FormInput fieldName="Nome do cliente" value={localBudget.name} />
-          <FormInput fieldName="Telefone" value={localBudget.phone} />
+          <FormInput
+            fieldName="Nome do cliente"
+            value={localBudget.name}
+            onChangeText={t => setLocalBudget(p => ({...p, name: t}))}
+          />
+          <FormInput
+            fieldName="Telefone"
+            value={localBudget.phone}
+            onChangeText={t => setLocalBudget(p => ({...p, phone: t}))}
+          />
           <FormInput
             fieldName="Localiza&ccedil;&atilde;o"
             value={localBudget.place}
+            onChangeText={t => setLocalBudget(p => ({...p, place: t}))}
           />
           <FormInput
             fieldName="Metros do po&ccedil;o"
             value={localBudget.size}
+            onChangeText={t => setLocalBudget(p => ({...p, size: t}))}
           />
           <FormInput
             fieldName="Condi&ccedil;&otilde;es de pagamento"
             value={localBudget.payment}
+            onChangeText={t => setLocalBudget(p => ({...p, payment: t}))}
           />
           <View
             style={{
@@ -133,7 +160,10 @@ const WizardReview = ({
               .sort((a, b) => a.name.localeCompare(b.name))
               .map(item => (
                 <ItemListView
-                  onLongPress={() => console.log('123')}
+                  onLongPress={() => {
+                    setDeleteId(item.id);
+                    setModalDelete(true);
+                  }}
                   key={item.id}
                   item={item}
                   onTouchItem={() => {
@@ -144,7 +174,9 @@ const WizardReview = ({
           </View>
         </ScrollView>
       </View>
-
+      <View style={{paddingBottom: 5}}>
+        <Text>TOTAL: R$ {localTotal}</Text>
+      </View>
       <View
         style={{
           flexDirection: 'row',
@@ -181,7 +213,7 @@ const WizardReview = ({
             backgroundColor: '#c2c2f9',
             borderRadius: 8,
           }}
-          onPress={() => {}}>
+          onPress={handleFinish}>
           <Text style={{fontSize: 18}}>FINALIZAR</Text>
         </TouchableOpacity>
       </View>
@@ -391,7 +423,69 @@ const WizardReview = ({
         </View>
       )}
 
-      {modalDelete && null}
+      {modalDelete && (
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            flex: 1,
+            backgroundColor: 'rgba(49, 49, 49, 0.81)',
+            width: '100%',
+            height: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              backgroundColor: '#f1f1f1',
+              padding: 10,
+              borderRadius: 8,
+              width: '90%',
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                width: '100%',
+                // backgroundColor: 'red',
+                alignItems: 'center',
+                justifyContent: 'center',
+                paddingHorizontal: 8,
+                marginTop: 14,
+              }}>
+              <Text style={{fontSize: 18}}>
+                Deseja realmente excluir o item?
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row', marginTop: 20}}>
+              <TouchableOpacity
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '50%',
+                  padding: 10,
+                  backgroundColor: '#88aa88',
+                  borderRadius: 8,
+                }}
+                onPress={() => setModalDelete(false)}>
+                <Text style={{fontSize: 18}}>NÃO</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '50%',
+                  padding: 10,
+                  backgroundColor: '#ff8888',
+                  borderRadius: 8,
+                }}
+                onPress={handleRemoveItem}>
+                <Text style={{fontSize: 18}}>SIM</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      )}
     </View>
   );
 };
