@@ -100,6 +100,9 @@ const NewBudget = ({navigation}: Props) => {
       );
     }
     case 4: {
+      if (presets.length === 0) {
+        setWizardIndex(9);
+      }
       return (
         <WizardItemsDesc
           nextWizard={() => {
