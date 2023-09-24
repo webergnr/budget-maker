@@ -30,8 +30,17 @@ const addBudget = async (b: IBudget) => {
   }
 };
 
+const backupDb = async () => {
+  try {
+    const jsonValues = await AsyncStorage.getItem(STORAGE_KEY);
+    return jsonValues;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const clearDb = async () => {
-  await await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+  // await await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify([]));
 };
 
 const removeBudget = async (b: IBudget) => {
@@ -44,4 +53,4 @@ const removeBudget = async (b: IBudget) => {
   }
 };
 
-export {addBudget, getBudgets, removeBudget, clearDb};
+export {addBudget, getBudgets, removeBudget, clearDb, backupDb};
