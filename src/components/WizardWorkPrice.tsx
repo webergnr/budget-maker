@@ -29,7 +29,7 @@ const WizardWorkPrice = ({
       name: 'Mão de obra',
       qty: 1,
       value: Number(currentPriceText),
-      description: '',
+      description: 'Mão de obra',
     };
 
     setItems(
@@ -92,6 +92,7 @@ const WizardWorkPrice = ({
           <TextBigQuestion>Qual &eacute; o valor?</TextBigQuestion>
           <View style={{padding: 10, width: '33%'}}>
             <TextInputQuestion
+              autoFocus
               keyboardType="number-pad"
               onChangeText={_ => setCurrentPriceText(_)}
               onEndEditing={() => handleNextQuestion()}

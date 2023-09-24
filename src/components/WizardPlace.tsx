@@ -15,6 +15,7 @@ const WizardPlace = ({
       <TextBigQuestion>Onde ser&aacute; o po&ccedil;o?</TextBigQuestion>
       <View style={{padding: 10, width: '100%'}}>
         <TextInputQuestion
+          autoFocus
           onChangeText={_ => setPlace(_)}
           onEndEditing={() => nextWizard()}
         />

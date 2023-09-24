@@ -53,6 +53,7 @@ const WizardQtys = ({
                 </TextBigQuestion>
                 <View style={{padding: 10, width: '33%'}}>
                   <TextInputQuestion
+                    autoFocus
                     keyboardType="number-pad"
                     value={currentQtyText}
                     onChangeText={_ => setCurrentQtyText(_)}

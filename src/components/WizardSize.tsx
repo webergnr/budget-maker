@@ -17,6 +17,7 @@ const WizardSize = ({
       </TextBigQuestion>
       <View style={{padding: 10, width: '33%'}}>
         <TextInputQuestion
+          autoFocus
           keyboardType="number-pad"
           onChangeText={_ => setSize(_)}
           onEndEditing={() => nextWizard()}

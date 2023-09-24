@@ -15,6 +15,7 @@ const WizardName = ({
       <TextBigQuestion>Qual o nome do cliente?</TextBigQuestion>
       <View style={{padding: 10, width: '100%'}}>
         <TextInputQuestion
+          autoFocus
           onChangeText={_ => setName(_)}
           onEndEditing={() => nextWizard()}
         />

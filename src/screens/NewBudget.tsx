@@ -1,6 +1,8 @@
 /* eslint-disable no-lone-blocks */
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import {Text, View} from 'react-native';
+import {RootStackParamList} from '../App';
 import WizardItemsDesc from '../components/WizardItemsDesc';
 import WizardName from '../components/WizardName';
 import WizardPhone from '../components/WizardPhone';
@@ -11,6 +13,7 @@ import WizardQtys from '../components/WizardQtys';
 import WizardReview from '../components/WizardReview';
 import WizardSize from '../components/WizardSize';
 import WizardWorkPrice from '../components/WizardWorkPrice';
+import {addBudget} from '../utils/storageBudget';
 
 export interface IItem {
   id: number;
@@ -22,7 +25,7 @@ export interface IItem {
 
 export interface IBudget {
   id: number;
-  date: string;
+  date: Date;
   name: string;
   phone?: string;
   place: string;
@@ -31,7 +34,16 @@ export interface IBudget {
   items: IItem[];
 }
 
-const NewBudget: React.FC = () => {
+type HomeScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'NewBudget'
+>;
+
+type Props = {
+  navigation: HomeScreenNavigationProp;
+};
+
+const NewBudget = ({navigation}: Props) => {
   const [wizardIndex, setWizardIndex] = useState<number>(0);
 
   const [infoName, setInfoName] = useState<string>('');
@@ -40,6 +52,11 @@ const NewBudget: React.FC = () => {
   const [infoSize, setInfoSize] = useState<string>('');
   const [presets, setPresets] = useState<string[]>([]);
   const [items, setItems] = useState<IItem[]>([]);
+
+  const handleSaveBudget = (b: IBudget) => {
+    addBudget(b);
+    navigation.navigate('Home');
+  };
 
   switch (wizardIndex) {
     case 0: {
@@ -83,6 +100,9 @@ const NewBudget: React.FC = () => {
       );
     }
     case 4: {
+      if (presets.length === 0) {
+        setWizardIndex(9);
+      }
       return (
         <WizardItemsDesc
           nextWizard={() => {
@@ -140,16 +160,16 @@ const NewBudget: React.FC = () => {
       return (
         <WizardReview
           currentBudget={{
-            id: 123,
-            date: new Date().toString(),
+            id: new Date().valueOf(),
+            date: new Date(),
             name: infoName,
             place: infoPlace,
             size: infoSize,
             phone: infoPhone,
             items,
-            payment: 'A vista',
+            payment: 'À vista',
           }}
-          setBudget={x => console.log(x)}
+          setBudget={handleSaveBudget}
         />
       );
     }

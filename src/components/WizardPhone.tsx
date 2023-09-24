@@ -63,6 +63,7 @@ const WizardPhone = ({
           <TextBigQuestion>Qual &eacute; o telefone?</TextBigQuestion>
           <View style={{padding: 10, width: '100%'}}>
             <TextInputQuestion
+              autoFocus
               keyboardType="number-pad"
               onChangeText={_ => setPhone(_)}
               onEndEditing={() => nextWizard()}
