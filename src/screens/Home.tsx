@@ -9,6 +9,10 @@ import {
   View,
 } from 'react-native';
 
+const GIST_ID = '<gist>';
+const GH_TOKEN =
+  '<gh_token>';
+
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../App';
 
@@ -18,7 +22,7 @@ import {makeBudgetHTML} from '../utils/budgetHTML';
 import {dateToString} from '../utils/date';
 import {generateSharePdf} from '../utils/pdfShare';
 import {
-  applyBackup,
+  applyFromBackup,
   backupDb,
   getBudgets,
   removeBudget,
@@ -106,52 +110,67 @@ const HomeScreen = ({navigation}: Props) => {
     setBudgets(await getBudgets());
   };
   const handleBkpDataImport = async () => {
-    const url =
-      'https://getpantry.cloud/apiv1/pantry/f49e84fe-7ec3-401d-a9a9-689220b41c3c/basket/orcamentos';
+    const url = `https://api.github.com/gists/${GIST_ID}`;
 
     const req = await fetch(url, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
+        'X-GitHub-Api-Version': '2022-11-28',
+        Accept: 'application/vnd.github+json',
+        Authorization: `Bearer ${GH_TOKEN}`,
       },
     });
 
     const rawData = await req.json();
+    const content = rawData?.files?.['jw-data.json']?.content;
+    if (content) {
+      console.log('###', content);
+      applyFromBackup(content);
+      Alert.alert('Dados importados com sucesso!');
+    }
 
-    console.log(rawData.data);
-
-    applyBackup(rawData.data);
-
-    Alert.alert('Dados importados com sucesso!');
+    // ;
   };
 
   const handleBkpData = async () => {
     const data = await backupDb();
+    const dt = new Date();
 
     const updateCurrentBkp = async () => {
-      const url =
-        'https://getpantry.cloud/apiv1/pantry/f49e84fe-7ec3-401d-a9a9-689220b41c3c/basket/orcamentos';
+      const url = `https://api.github.com/gists/${GIST_ID}`;
 
       await fetch(url, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
+          'X-GitHub-Api-Version': '2022-11-28',
+          Accept: 'application/vnd.github+json',
+          Authorization: `Bearer ${GH_TOKEN}`,
+          'content-type': 'application/json',
         },
-        body: JSON.stringify({data}),
+        body: JSON.stringify({
+          description: `${dt.toISOString()}`,
+          public: false,
+          files: {['jw-data.json']: {content: data}},
+        }),
       });
     };
 
     const addNewBkp = async () => {
-      const url = `https://getpantry.cloud/apiv1/pantry/f49e84fe-7ec3-401d-a9a9-689220b41c3c/basket/bkp-${new Date().valueOf()}`;
+      const url = 'https://api.github.com/gists';
 
       await fetch(url, {
         method: 'POST',
         headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
+          'X-GitHub-Api-Version': '2022-11-28',
+          Accept: 'application/vnd.github+json',
+          Authorization: `Bearer ${GH_TOKEN}`,
+          'content-type': 'application/json',
         },
-        body: JSON.stringify({data}),
+        body: JSON.stringify({
+          description: `${dt.toISOString()}`,
+          public: false,
+          files: {[`jw-data-${dt.valueOf()}.json`]: {content: data}},
+        }),
       });
     };
 
@@ -358,7 +377,7 @@ const HomeScreen = ({navigation}: Props) => {
                   justifyContent: 'center',
                   width: '50%',
                   padding: 10,
-                  backgroundColor: '#ff8888',
+                  backgroundColor: '#8888FF',
                   borderRadius: 8,
                 }}
                 onPress={handleBkpDataImport}>

@@ -39,13 +39,13 @@ const backupDb = async () => {
   }
 };
 
-const applyBackup = async (backup: string) => {
+const applyFromBackup = async (backup: string) => {
   try {
     await AsyncStorage.setItem(STORAGE_KEY, backup);
   } catch (e) {
     console.log(e);
   }
-}
+};
 
 const clearDb = async () => {
   // await await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify([]));
@@ -61,4 +61,11 @@ const removeBudget = async (b: IBudget) => {
   }
 };
 
-export {addBudget, getBudgets, removeBudget, clearDb, backupDb, applyBackup};
+export {
+  addBudget,
+  getBudgets,
+  removeBudget,
+  clearDb,
+  backupDb,
+  applyFromBackup,
+};
