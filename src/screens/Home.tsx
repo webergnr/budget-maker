@@ -5,6 +5,7 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 
@@ -16,8 +17,14 @@ import {shareIcon64} from '../imgs/share';
 import {makeBudgetHTML} from '../utils/budgetHTML';
 import {dateToString} from '../utils/date';
 import {generateSharePdf} from '../utils/pdfShare';
-import {getBudgets, removeBudget} from '../utils/storageBudget';
+import {
+  applyBackup,
+  backupDb,
+  getBudgets,
+  removeBudget,
+} from '../utils/storageBudget';
 import {IBudget} from './NewBudget';
+import {Alert} from 'react-native';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -91,11 +98,67 @@ const HomeScreen = ({navigation}: Props) => {
   const [budgets, setBudgets] = useState<IBudget[]>([]);
   const [deleteId, setDeleteId] = useState<number>(0);
   const [modalDelete, setModalDelete] = useState<boolean>(false);
+  const [modalOptions, setModalOptions] = useState<boolean>(false);
 
   const handleRemoveItem = async () => {
     await removeBudget({id: deleteId} as IBudget);
     setModalDelete(false);
     setBudgets(await getBudgets());
+  };
+  const handleBkpDataImport = async () => {
+    const url =
+      'https://getpantry.cloud/apiv1/pantry/f49e84fe-7ec3-401d-a9a9-689220b41c3c/basket/orcamentos';
+
+    const req = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const rawData = await req.json();
+
+    console.log(rawData.data);
+
+    applyBackup(rawData.data);
+
+    Alert.alert('Dados importados com sucesso!');
+  };
+
+  const handleBkpData = async () => {
+    const data = await backupDb();
+
+    const updateCurrentBkp = async () => {
+      const url =
+        'https://getpantry.cloud/apiv1/pantry/f49e84fe-7ec3-401d-a9a9-689220b41c3c/basket/orcamentos';
+
+      await fetch(url, {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({data}),
+      });
+    };
+
+    const addNewBkp = async () => {
+      const url = `https://getpantry.cloud/apiv1/pantry/f49e84fe-7ec3-401d-a9a9-689220b41c3c/basket/bkp-${new Date().valueOf()}`;
+
+      await fetch(url, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({data}),
+      });
+    };
+
+    await updateCurrentBkp();
+    await addNewBkp();
+
+    Alert.alert('Backup realizado com sucesso!');
   };
 
   const handleDisplayDeleteModal = (b: IBudget) => {
@@ -123,9 +186,14 @@ const HomeScreen = ({navigation}: Props) => {
           borderStyle: 'solid',
           borderBottomWidth: 2,
         }}>
-        <Text style={{color: '#2f2f2f', fontSize: 32, fontWeight: 'bold'}}>
-          ORCAMENTOS
-        </Text>
+        <TouchableWithoutFeedback
+          onLongPress={() => {
+            setModalOptions(true);
+          }}>
+          <Text style={{color: '#2f2f2f', fontSize: 32, fontWeight: 'bold'}}>
+            ORCAMENTOS
+          </Text>
+        </TouchableWithoutFeedback>
         <View>
           <TouchableOpacity
             style={{
@@ -219,6 +287,82 @@ const HomeScreen = ({navigation}: Props) => {
                 }}
                 onPress={handleRemoveItem}>
                 <Text style={{fontSize: 18}}>SIM</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      )}
+
+      {modalOptions && (
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            flex: 1,
+            backgroundColor: 'rgba(49, 49, 49, 0.81)',
+            width: '100%',
+            height: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              backgroundColor: '#f1f1f1',
+              padding: 10,
+              borderRadius: 8,
+              width: '90%',
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                width: '100%',
+                // backgroundColor: 'red',
+                alignItems: 'center',
+                justifyContent: 'center',
+                paddingHorizontal: 8,
+                marginTop: 14,
+              }}>
+              <Text style={{fontSize: 18}}> bkps </Text>
+            </View>
+            <View style={{flexDirection: 'row', marginTop: 20}}>
+              <TouchableOpacity
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '50%',
+                  padding: 10,
+                  backgroundColor: '#88aa88',
+                  borderRadius: 8,
+                }}
+                onPress={() => setModalOptions(false)}>
+                <Text style={{fontSize: 18}}>Fechar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '50%',
+                  padding: 10,
+                  backgroundColor: '#ff8888',
+                  borderRadius: 8,
+                }}
+                onPress={handleBkpData}>
+                <Text style={{fontSize: 18}}>Salvar</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{flexDirection: 'row', marginTop: 20}}>
+              <TouchableOpacity
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '50%',
+                  padding: 10,
+                  backgroundColor: '#ff8888',
+                  borderRadius: 8,
+                }}
+                onPress={handleBkpDataImport}>
+                <Text style={{fontSize: 18}}>Importar</Text>
               </TouchableOpacity>
             </View>
           </View>

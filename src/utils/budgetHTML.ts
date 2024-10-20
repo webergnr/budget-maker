@@ -110,14 +110,18 @@ const makeBudgetHTML = (budget: IBudget) => {
       </head>
       <body>
         <header>
-          <img
-            src="${logoBase64}"
-            alt=""
-            width="200"
-          />
+          <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 300px; height: 120px;">
+            <img
+              src="${logoBase64}"
+              alt=""
+              width="300"
+              height="auto"
+            />
+            <h3 style="padding-top: 12px; color: #010066; font-weight: bold;">www.jwperfuracoes.com.br</h3>
+          </div>
           <div class="info">
             <h1>Ailton Weder</h1>
-            <h3>Av. São Judas Tadeu, 355. SJRP, SP</h3>
+            <h3>Rua Anísio José Ioca, 482. SJRP, SP</h3>
             <div style="display: flex; align-items: flex-start; height: 26px">
               <div style="margin-right: 10px">
                 <svg
@@ -140,7 +144,7 @@ const makeBudgetHTML = (budget: IBudget) => {
               </div>
               <h3>(17) 99776.0629</h3>
             </div>
-            <h3>jwperfuracoes@gmail.com</h3>
+            <h3>jwperfuracoes@yahoo.com.br</h3>
           </div>
         </header>
         <hr color="#3989c6" />
@@ -211,15 +215,9 @@ const makeBudgetHTML = (budget: IBudget) => {
             <br />
             <br />
             <span style="color: #888888; font-size: 10pt">
-              Obs: Proposta preventiva para perfuração e instalação de poço
-              artesiano com profundidade de <strong>0 à ${
+              Obs: Proposta preventiva para perfuração e instalação de poço artesiano com profundidade de <strong>0 à ${
                 budget.size
-              }</strong> metros ou até o
-              Basalto. Água e energia por conta do cliente. A cotação dos materias e
-              serviços constados acima poderão variar de acordo com as condições
-              geológicas do solo sendo os excedente cobrados a parte. A qualidade
-              e/ou quantidade de água produzida pelo poço, dependem unicamente do
-              sub-solo.
+              }</strong> metros ou até o Basalto. Água e energia por conta do cliente. A cotação dos materiais e serviços constados acima poderão variar conforme as condições geológicas do solo, sendo os excedentes cobrados a parte. A qualidade e/ou quantidade de água produzida pelo poço, dependem unicamente do sub-solo.
             </span>
           </div>
         </section>
@@ -234,7 +232,7 @@ const makeBudgetHTML = (budget: IBudget) => {
             "
           >
             <hr color="#3989c6" width="100%" />
-            JW Perfurações - Comercio de Poços Artesianos e Assistencia Técnica
+            JW Perfurações - Comércio de Poços Artesianos e Assistência Técnica
           </div>
         </section>
       </body>
